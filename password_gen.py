@@ -1,5 +1,7 @@
 import random
 import pickle
+import os
+import shutil
 alphabets = ['a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z']
 up_alphabets = ['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z']
 special_chars = ['!','@','#','$','%','^','&','*','~','+','-','_','?']
@@ -15,6 +17,11 @@ def password(description,digits):
     works2 = False
     works3 = False
     n = list()
+    class my_dictionary(dict):
+        def __init__(self):
+            self = dict()
+        def add(self, key, value):
+            self[key] = value
     for l in range(ten):
         o = random.randint(0,9)
         o = str(o)
@@ -79,7 +86,26 @@ def password(description,digits):
             password = "".join(password)
     except Exception:
         pass
-    password = str(password) 
+    password = str(password)
     print(str(password))
-    
+    print('save the password?')
+    answer = input('>>>')
+    answer = answer.upper()
+    dictt = dict()
+    dictt.update({description : password})
+    try:
+        with open('passwords.pickle', 'rb') as handle:
+            b = pickle.load(handle)
+            dictt += b
+    except:
+        pass
+    if answer == 'YES':
+        with open(description, 'wb') as handle:
+            pickle.dump(dictt, handle, protocol=pickle.HIGHEST_PROTOCOL)
+    if answer == 'NO':
+        pass  
+def find(descrip):
+    with open(descrip, 'rb') as handle:
+        b = pickle.load(handle)
+    print(b.get(descrip))
     
